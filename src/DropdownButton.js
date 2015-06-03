@@ -21,7 +21,17 @@ const DropdownButton = React.createClass({
     onSelect:  React.PropTypes.func,
     navItem:   React.PropTypes.bool,
     noCaret:   React.PropTypes.bool,
-    buttonClassName: React.PropTypes.string
+    buttonClassName: React.PropTypes.string,
+    isOpen:   React.PropTypes.bool
+  },
+
+
+  componentWillMount() {
+    this.setDropdownState(this.props.isOpen);
+  },
+
+  componentWillReceiveProps(newProps) {
+    this.setDropdownState(newProps.isOpen);
   },
 
   render() {
