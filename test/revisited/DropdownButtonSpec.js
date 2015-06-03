@@ -118,6 +118,32 @@ describe('DropdownButton revisited', function() {
     buttonNode.getAttribute('aria-haspopup').should.equal('true');
   });
 
+  it('forwards onSelect handler to MenuItems', function(done) {
+    let selectedEvents = [];
+    let onSelect = (event, selectEvent) => {
+      selectedEvents.push(selectEvent.eventKey);
+
+      if (selectedEvents.length === 4) {
+        selectedEvents.should.eql(['1', '2', '3', '4']);
+        done();
+      }
+    };
+    let instance = ReactTestUtils.renderIntoDocument(
+      <DropdownButton title='Simple Dropdown' onSelect={onSelect}>
+        <MenuItem eventKey='1'>Item 1</MenuItem>
+        <MenuItem eventKey='2'>Item 2</MenuItem>
+        <MenuItem eventKey='3'>Item 3</MenuItem>
+        <MenuItem eventKey='4'>Item 4</MenuItem>
+      </DropdownButton>
+    );
+
+    let menuItems = ReactTestUtils.scryRenderedDOMComponentsWithTag(instance, 'A');
+
+    menuItems.forEach(item => {
+      ReactTestUtils.Simulate.click(item);
+    });
+  });
+
   describe('PropType validation', function() {
     ['title', 'children'].forEach(type => {
       describe(type, function() {

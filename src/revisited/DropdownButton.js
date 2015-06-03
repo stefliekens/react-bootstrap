@@ -12,6 +12,7 @@ export default class DropdownButton extends React.Component {
     this.toggleOpen = this.toggleOpen.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
     this.extractChildren = this.extractChildren.bind(this);
 
     this.state = {
@@ -60,6 +61,18 @@ export default class DropdownButton extends React.Component {
     }
   }
 
+  handleSelect(event, selectEvent) {
+    if (this.props.onSelect) {
+      this.props.onSelect(event, selectEvent);
+    }
+
+    if (selectEvent.isSelectionPrevented()) {
+      return;
+    }
+
+    this.handleRequestClose(event);
+  }
+
   render() {
     let id = this.props.id || this.state.id;
     let { title, children } = this.extractChildren();
@@ -89,6 +102,7 @@ export default class DropdownButton extends React.Component {
           ref='menu'
           open={this.state.open}
           requestClose={this.handleRequestClose}
+          onSelect={this.handleSelect}
           labelledBy={id}>
           {children}
         </DropdownMenu>
@@ -145,5 +159,7 @@ DropdownButton.propTypes = {
 
   title: titleRequired,
 
-  children: titleRequired
+  children: titleRequired,
+
+  onSelect: React.PropTypes.func
 };
